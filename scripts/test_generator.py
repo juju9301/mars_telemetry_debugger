@@ -1,4 +1,4 @@
-from app.generator import generate_random_packet
+from app.generator.generator import generate_random_packet
 
 def main() -> None:
     packet = generate_random_packet(sol=913)
