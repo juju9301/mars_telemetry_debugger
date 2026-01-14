@@ -1,0 +1,28 @@
+[project]
+name = "mars_telemetry_debugger"
+version = "0.1.0"
+description = "A Mars rover telemetry generator, parser, and debugging tool."
+authors = [
+    { name = "Ivan Kovresov" }
+]
+requires-python = ">=3.10"
+
+# These are the same dependencies as requirements.txt
+dependencies = [
+    "pydantic>=2.0",
+    "rich>=13.0",
+    "textual>=0.40",
+    "fastapi>=0.110",
+    "uvicorn>=0.29"
+]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-q"
