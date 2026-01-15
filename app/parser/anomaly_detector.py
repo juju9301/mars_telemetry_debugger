@@ -1,6 +1,13 @@
 from typing import List
 from app.models.telemetry import TelemetryPacket
 
+def is_out_of_range(value, low, high):
+    if value is None:
+        return False
+    if not isinstance(value, (int, float)):
+        return False
+    return value < low or value > high 
+
 
 class AnomalyDetector:
 
@@ -9,18 +16,15 @@ class AnomalyDetector:
 
         # Battery anomalies
 
-        if packet.battery_level < 20:
-            anomalies.append("Battery critically low")
-        if packet.battery_level > 100:
-            anomalies.append('Battery reading out of range (>100%)')
+        if is_out_of_range(packet.battery_level, 20, 100):
+            anomalies.append('Battery reading out of range')
 
         #Temperature anomalies
-        if packet.temperature_internal is None:
-            anomalies.append('Missing temperature_internal value')
-        if packet.temperature_internal < -50 or packet.temperature_internal > 50:
+        
+        if is_out_of_range(packet.temperature_internal, -50, 50):
             anomalies.append(f'Internal temperature out of expected range, {packet.temperature_internal}')
 
-        if packet.temperature_external < -150 or packet.temperature_external > 20:
+        if is_out_of_range(packet.temperature_external, -150, 20):
             anomalies.append(f'External temperature out of expected range, {packet.temperature_external}')
 
         # Radiation anomalies
