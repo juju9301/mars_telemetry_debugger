@@ -36,7 +36,7 @@ class FaultInjector:
         """
         Sets battery charge level to a nonsense value.
         """
-        packet.battery_level = random.choice(-10, 105, 102)
+        packet.battery_level = random.choice([-10, 105, 102])
         packet.error_flags = ['WARN']
         packet.note = 'Battery corruption fault'
         return packet
