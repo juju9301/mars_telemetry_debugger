@@ -23,7 +23,7 @@ async def telemetry_websocket(websocket: WebSocket):
         # Convert ProcessedPacket into JSON-serializable dict
 
         payload = {
-            "packet": result.packet.model_dump_json(),
+            "packet": result.packet.model_dump(mode="json"),
             "parser_errors": result.parser_errors,
             "anomalies": result.anomalies,
         }
