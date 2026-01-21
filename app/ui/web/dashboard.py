@@ -8,13 +8,9 @@ st.set_page_config(page_title="Mars Telemetry Dashboard", layout="wide")
 
 st.title("🚀 Mars Telemetry Dashboard")
 
-packet_box = st.empty()
-errors_box = st.empty()
-anomalies_box = st.empty()
-
 # Keep websocket connection alive across reruns
-if "ws" not in st.session_state:
-    st.session_state.ws = None
+if "ws_charts" not in st.session_state:
+    st.session_state.ws_charts = None
 
 # History buffer for charts
 if "history" not in st.session_state:
@@ -22,8 +18,8 @@ if "history" not in st.session_state:
 
 
 async def connect_ws():
-    if st.session_state.ws is None:
-        st.session_state.ws = await websockets.connect("ws://localhost:8000/ws/telemetry")
+    if st.session_state.ws_charts is None:
+        st.session_state.ws_charts = await websockets.connect("ws://localhost:8000/ws/telemetry")
 
 
 async def stream_loop():
@@ -42,7 +38,7 @@ async def stream_loop():
 
     while True:
         try:
-            message = await st.session_state.ws.recv()
+            message = await st.session_state.ws_charts.recv()
             data = json.loads(message)
 
             # Update packet info
@@ -52,11 +48,6 @@ async def stream_loop():
             # If packet is a JSON string, decode it
             if isinstance(packet, str):
                 packet = json.loads(packet)
-
-
-            packet_box.json(packet)
-            errors_box.error(data["parser_errors"] or "No parser errors")
-            anomalies_box.warning(data["anomalies"] or "No anomalies")
 
             # Add to history
 
